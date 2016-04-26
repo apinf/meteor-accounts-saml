@@ -51,7 +51,14 @@ var openCenteredPopup = function (url, width, height) {
 
 Meteor.loginWithSaml = function (options, callback) {
     options = options || {};
-    var credentialToken = Random.id();
+    // Generate random alphanumeric string
+    var chars = "abcdef0123456789";
+    var uniqueID = "";
+    for (var i = 0; i < 20; i++) {
+        uniqueID += chars.substr(Math.floor((Math.random() * 15)), 1);
+    }
+    var credentialToken = uniqueID;
+    console.log(credentialToken);
     options.credentialToken = credentialToken;
 
     Accounts.saml.initiateLogin(options, function (error, result) {
@@ -66,7 +73,7 @@ Meteor.loginWithSaml = function (options, callback) {
 };
 
 Meteor.logoutWithSaml = function (options, callback) {
-    //Accounts.saml.idpInitiatedSLO(options, callback); 
+    //Accounts.saml.idpInitiatedSLO(options, callback);
     Meteor.call("samlLogout", options.provider, function (err, result) {
         console.log("LOC " + result);
                 // A nasty bounce: 'result' has the SAML LogoutRequest but we need a proper 302 to redirected from the server.

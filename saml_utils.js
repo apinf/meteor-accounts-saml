@@ -39,7 +39,7 @@ SAML.prototype.initialize = function (options) {
     }
 
     if (options.identifierFormat === undefined) {
-        options.identifierFormat = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress";
+        options.identifierFormat = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"; // MPASS default
     }
 
     if (options.authnContext === undefined) {
@@ -108,7 +108,7 @@ SAML.prototype.generateLogoutRequest = function (options) {
     // options should be of the form
     // nameId: <nameId as submitted during SAML SSO>
     // sessionIndex: sessionIndex
-    // --- NO SAMLsettings: <Meteor.setting.saml  entry for the provider you want to SLO from   
+    // --- NO SAMLsettings: <Meteor.setting.saml  entry for the provider you want to SLO from
 
     var id = "_" + this.generateUniqueID();
     var instant = this.generateInstant();
@@ -175,7 +175,7 @@ SAML.prototype.requestToUrl = function (request, operation, callback) {
             samlRequest.Signature = self.signRequest(querystring.stringify(samlRequest));
         }
 
-        // TBD. We should really include a proper RelayState here 
+        // TBD. We should really include a proper RelayState here
         if (operation === 'logout') {
             // in case of logout we want to be redirected back to the Meteor app.
             var relayState = Meteor.absoluteUrl();
@@ -448,7 +448,7 @@ SAML.prototype.generateServiceProviderMetadata = function (callbackUrl) {
 
     if (!decryptionCert) {
         decryptionCert = this.options.privateCert;
-    }  
+    }
 
     if (this.options.privateKey) {
         if (!decryptionCert) {
