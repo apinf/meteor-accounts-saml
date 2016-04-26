@@ -39,7 +39,7 @@ SAML.prototype.initialize = function (options) {
     }
 
     if (options.identifierFormat === undefined) {
-        options.identifierFormat = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"; // MPASS default
+        options.identifierFormat = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress";
     }
 
     if (options.authnContext === undefined) {
