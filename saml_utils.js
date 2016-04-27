@@ -238,10 +238,10 @@ SAML.prototype.validateSignature = function (xml, cert) {
     var sig = new xmlCrypto.SignedXml();
 
     sig.keyInfoProvider = {
-        getKeyInfo: function (key) {
+        getKeyInfo: function () {
             return "<X509Data></X509Data>"
         },
-        getKey: function (keyInfo) {
+        getKey: function () {
             return self.certToPEM(cert);
         }
     };
@@ -336,14 +336,14 @@ SAML.prototype.validateResponse = function (samlResponse, relayState, callback) 
         if (Meteor.settings.debug) {
             console.log("Verify signature");
         }
-        /* Skip signature check
+
         if (self.options.cert && !self.validateSignature(xml, self.options.cert)) {
             if (Meteor.settings.debug) {
                 console.log("Signature WRONG");
             }
             return callback(new Error('Invalid signature'), null, false);
         }
-        */
+
         if (Meteor.settings.debug) {
             console.log("Signature OK");
         }
