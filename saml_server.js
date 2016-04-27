@@ -214,7 +214,8 @@ middleware = function (req, res, next) {
                     });
                     res.end();
                 } else {
-                    // TBD thinking of sth meaning full.   
+                    // Log error at least if we fail in validation
+                    console.log("Just failed in validating logout response: " + err);
                 }
             })
             break;
@@ -242,6 +243,13 @@ middleware = function (req, res, next) {
         case "validate":
             _saml = new SAML(service);
             Accounts.saml.RelayState = req.body.RelayState;
+
+            // Log response & state
+            if( Meteor.settings.debug ) {
+              console.log(req.body.SAMLResponse);
+              console.log(req.body.RelayState);
+            }
+
             _saml.validateResponse(req.body.SAMLResponse, req.body.RelayState, function (err, profile, loggedOut) {
                 if (err)
                     throw new Error("Unable to validate response url: " + err);
