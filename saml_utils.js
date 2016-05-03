@@ -238,20 +238,21 @@ SAML.prototype.validateSignature = function (xml, cert) {
     var sig = new xmlCrypto.SignedXml();
 
     sig.keyInfoProvider = {
-        getKeyInfo: function () {
-            return "<X509Data></X509Data>"
-        },
-        getKey: function () {
-            return self.certToPEM(cert);
-        }
+      getKeyInfo: function (key) {
+        return "<X509Data></X509Data>";
+      },
+      getKey: function (keyInfo) {
+        return self.certToPEM(cert);
+      }
     };
-
-    sig.loadSignature(signature);
+    sig.loadSignature(signature.toString());
+    //remove the signature tag
+    doc.removeChild(signature);
 
     // Debug validation
-    var sigCheck = sig.checkSignature(xml);
+    var sigCheck = sig.checkSignature(doc.toString());
 
-    if( Meteor.settings.debug && !res ) {
+    if( Meteor.settings.debug && !sigCheck ) {
       console.log("## IMPORTANT FAIL ##")
       console.log(sig.validationErrors);
     }
